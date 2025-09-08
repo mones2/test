@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Review Flow – Dark Neon</title>
+<title>Sahara – Share your experience</title>
 <style>
   :root{
     --bg:#0b0d14; --surface:#111522;
@@ -11,12 +11,13 @@
     --border:rgba(255,255,255,.10); --border-2:rgba(255,255,255,.18);
     --text:#f2f4fb; --muted:#aeb3c4;
 
-    /* Gradient (violet → pink) */
-    --a1:#b65cff; --a2:#ff46c3;
+    /* BLUE gradient */
+    --a1:#00c7ff;    /* cyan-blue */
+    --a2:#3b82f6;    /* vivid blue */
 
     --success:#8dffcc;
-    --r:20px; --shadow:0 0 30px rgba(182,92,255,.16);
-    --focus:0 0 0 4px rgba(182,92,255,.45);
+    --r:20px; --shadow:0 0 30px rgba(0,199,255,.16);
+    --focus:0 0 0 4px rgba(0,199,255,.45);
     --base-font:18px; --tap:50px;
   }
   *{box-sizing:border-box} html,body{height:100%}
@@ -24,13 +25,14 @@
     margin:0; color:var(--text);
     font:400 var(--base-font)/1.6 system-ui,-apple-system,Inter,Segoe UI,Roboto,Arial;
     background:
-      radial-gradient(1200px 650px at 15% -10%, rgba(182,92,255,.12), transparent 60%),
-      radial-gradient(1100px 550px at 90% 110%, rgba(255,70,195,.10), transparent 60%),
+      radial-gradient(1200px 650px at 15% -10%, rgba(0,199,255,.12), transparent 60%),
+      radial-gradient(1100px 550px at 90% 110%, rgba(59,130,246,.10), transparent 60%),
       var(--bg);
   }
   .wrap{max-width:920px;margin:32px auto 96px;padding:0 18px}
 
-  h1{margin:0 0 .2rem;font-size:clamp(2.2rem,6vw,3.6rem);letter-spacing:-.02em;line-height:1.1}
+  h1{margin:0 0 .25rem;font-size:clamp(2.2rem,6vw,3.2rem);letter-spacing:-.02em;line-height:1.1}
+  h2{margin:.1rem 0 .9rem;font-size:clamp(1.2rem,3.5vw,1.5rem);font-weight:500;color:var(--muted)}
   .accent{background:linear-gradient(90deg,var(--a1),var(--a2));
     -webkit-background-clip:text;background-clip:text;color:transparent}
 
@@ -59,6 +61,7 @@
   }
   .btn[disabled]{opacity:.55;cursor:not-allowed}
   button:focus-visible, a:focus-visible{outline:none; box-shadow:var(--focus)}
+  .btn-flex{flex:1 1 240px} /* make Post on Google and Help with AI same size */
 
   /* Fast glow ONLY for Step 4 "Post on Google" */
   .btn--pulse{ position:relative; isolation:isolate; }
@@ -69,12 +72,12 @@
   }
   @keyframes pulse{0%,100%{opacity:.45}50%{opacity:.9}}
 
-  /* Experience (first 3) — same pink gradient, NO glow */
+  /* Experience (first 3) — same BLUE gradient, NO glow */
   .choices{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   .choice{
     padding:18px 20px; border-radius:9999px; font-weight:900; letter-spacing:.01em;
     border:1px solid var(--border);
-    color:#fff; background:linear-gradient(90deg,var(--a1),var(--a2)); /* no ::after glow */
+    color:#fff; background:linear-gradient(90deg,var(--a1),var(--a2));
     text-align:center; transition:transform .12s,border-color .12s;
   }
   .choice:hover{transform:translateY(-2px);border-color:var(--border-2)}
@@ -96,6 +99,26 @@
     color:var(--text); padding:1rem; font:inherit;
   }
 
+  /* Wizard progress slider */
+  .meter{ margin:.4rem 0 1rem; }
+  .meter-label{font-size:.95rem; color:var(--muted); margin-bottom:.25rem}
+  .meter-track{
+    position:relative; height:14px; border-radius:9999px;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+  }
+  .meter-fill{
+    position:absolute; inset:0 auto 0 0; width:0%; border-radius:9999px;
+    background:linear-gradient(90deg,var(--a1),var(--a2));
+  }
+  .meter-knob{
+    position:absolute; top:50%; left:0%; transform:translate(-50%,-50%);
+    width:14px; height:14px; background:transparent;
+    border:2px solid var(--a2); box-shadow:0 0 0 2px rgba(59,130,246,.25);
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    border-radius:2px; background-color:rgba(59,130,246,.12);
+  }
+
   /* Negative success */
   .success{text-align:center; padding:36px 20px;}
   .success .circle{
@@ -108,18 +131,18 @@
   .success h3{ margin:.4rem 0 .2rem; font-size:1.35rem }
   .success p{ margin:.1rem 0; color:var(--muted) }
 
-  @media (max-width:860px){ .choices{grid-template-columns:1fr} }
+  @media (max-width:860px){ .choices{grid-template-columns:1fr} .btn-flex{flex:1 1 100%} }
   @media (prefers-reduced-motion:reduce){ *{transition:none!important; animation:none!important} }
 </style>
 </head>
 <body>
 <main class="wrap">
-  <!-- Bigger heading -->
-  <h1>How was your <span class="accent">visit?</span></h1>
+  <!-- New intro -->
+  <h1>Share your experience at <span class="accent">Sahara</span></h1>
+  <h2>How was your experience today?</h2>
 
-  <!-- Step 0: Experience (no glow; same gradient) -->
+  <!-- Step 0: Experience -->
   <section id="step0" class="card" aria-labelledby="expLabel">
-    <div id="expLabel" class="muted" style="font-size:1.05rem;margin-bottom:.4rem">Choose one</div>
     <div class="choices" role="group" aria-label="Experience">
       <button class="choice" data-kind="excellent">Excellent</button>
       <button class="choice" data-kind="good">Good</button>
@@ -127,26 +150,36 @@
     </div>
   </section>
 
-  <!-- Positive: Post on Google + Help with AI (no glow here) -->
+  <!-- Positive: Post on Google + Help with AI (same size) -->
   <section id="positive" class="card hidden" aria-live="polite">
-    <div class="row">
-      <a id="googleTop" class="btn" href="#" target="_blank" rel="noopener">Post on Google</a>
-      <button id="helpAI" class="btn btn--ghost">Help with AI</button>
+    <div class="row" style="width:100%">
+      <a id="googleTop" class="btn btn-flex" href="#" target="_blank" rel="noopener">Post on Google</a>
+      <button id="helpAI" class="btn btn--ghost btn-flex">Help with AI</button>
       <span id="gNote" class="muted" aria-live="polite"></span>
     </div>
   </section>
 
-  <!-- Wizard (4 steps; opens on Step 2) -->
+  <!-- Wizard (4 steps; ALWAYS starts at Step 1) -->
   <section id="wizard" class="card hidden" aria-live="polite">
     <div class="row" style="justify-content:space-between">
       <strong id="wLabel">Step 1 of 4</strong>
       <button id="backBtn" class="btn btn--ghost">Back</button>
     </div>
+
+    <!-- Progdsfress slider -->
+    <div class="meter" aria-hidden="true">
+      <div class="meter-label">Progress</div>
+      <div class="meter-track">
+        <div id="meterFill" class="meter-fill"></div>
+        <div id="meterKnob" class="meter-knob"></div>
+      </div>
+    </div>
+
     <div class="hr"></div>
 
-    <!-- Step 1: Keywords -->
+    <!-- Step 1: Pick keywords (unlimited) -->
     <div id="w1">
-      <div style="font-weight:800;margin:.2rem 0">Pick keywords (up to 3)</div>
+      <div style="font-weight:800;margin:.2rem 0">Pick keywords</div>
       <div id="kwList" class="chips"></div>
       <div class="hr"></div>
       <div class="row" style="justify-content:flex-end">
@@ -154,8 +187,8 @@
       </div>
     </div>
 
-    <!-- Step 2: Visit type / Parking (stacked rows) -->
-    <div id="w2" class="hidden">>
+    <!-- Step 2: Visit type / Parking -->
+    <div id="w2" class="hidden">
       <div style="font-weight:800;margin:.2rem 0">Visit type</div>
       <div id="visitType" class="chips" data-single></div>
 
@@ -178,9 +211,9 @@
       </div>
     </div>
 
-    <!-- Step 4: Your review -->
+    <!-- Step 4: Write your review -->
     <div id="w4" class="hidden">
-      <div style="font-weight:800;margin:.2rem 0">Your review</div>
+      <div style="font-weight:800;margin:.2rem 0">Write your review</div>
       <textarea id="review" rows="6"></textarea>
       <div class="row" style="margin-top:.8rem">
         <button id="refineBtn" class="btn btn--ghost">Refine wording</button>
@@ -228,18 +261,12 @@
     <p>We appreciate your time.</p>
   </section>
 
-  <!-- Gradient for any SVG fills if needed later -->
-  <svg width="0" height="0" style="position:absolute"><defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#b65cff"/><stop offset="100%" stop-color="#ff46c3"/>
-    </linearGradient>
-  </defs></svg>
-
   <div id="live" class="hidden" aria-live="polite"></div>
 </main>
 
 <script>
-const GOOGLE_URL = ""; // <-- your Google Reviews link
+/* Google link (set to Sahara Restaurant) */
+const GOOGLE_URL = "https://www.google.com/maps/place/Sahara+Restaurant/@40.5000681,-74.4567202,17z/data=!4m8!3m7!1s0x89c3c6ff3e35125b:0xc9ebce3f3d21e043!8m2!3d40.5000681!4d-74.4541453!9m1!1b1!16s%2Fg%2F1tczldzb?hl=en-US&entry=ttu";
 
 const $ = id => document.getElementById(id);
 const show = el => el.classList.remove("hidden");
@@ -252,29 +279,32 @@ $("step0").querySelectorAll(".choice").forEach(btn=>{
   btn.addEventListener("click",()=>{
     const kind = btn.dataset.kind;
     hide($("step0"));
-    if(kind==="bad"){ state.exp="Not great"; show($("negative")); renderNeg(); }
-    else{ state.exp = (kind==="excellent")?"Excellent":"Good"; show($("positive")); initTopRow(); }
+    if(kind==="bad"){
+      state.exp="Not great"; show($("negative")); renderNeg();
+    }else{
+      state.exp = (kind==="excellent")?"Excellent":"Good";
+      show($("positive")); initTopRow();
+    }
   });
 });
 
 /* Positive top row */
 function initTopRow(){
-  if(GOOGLE_URL){ $("googleTop").href=GOOGLE_URL; $("googleBottom").href=GOOGLE_URL; $("gNote").textContent=""; }
-  else{
-    ["googleTop","googleBottom"].forEach(id=>$(id).addEventListener("click",e=>e.preventDefault()));
-    $("gNote").textContent = "Google link not set";
-  }
-  $("helpAI").onclick = ()=>{ hide($("positive")); show($("wizard")); wizard.go(0); }; // open on Step 2
+  $("googleTop").href=GOOGLE_URL;
+  $("googleBottom").href=GOOGLE_URL;
+  $("gNote").textContent="";
+  $("helpAI").onclick = ()=>{ hide($("positive")); show($("wizard")); wizard.go(0); }; // start on Step 1
 }
 
-/* Wizard controller */
+/* Wizard controller (4 steps, start at 1) */
 const wizard = (()=>{
   const steps=[ $("w1"), $("w2"), $("w3"), $("w4") ];
-  let i=1; // open at Step 2
+  let i=0;
   function set(idx){
     i=idx; steps.forEach((s,j)=>s.classList.toggle("hidden", j!==i));
     $("wLabel").textContent = `Step ${i+1} of 4`;
     $("backBtn").disabled = i===0;
+    animateMeterTo([0,33,66,100][i]); // 0% → 100%
   }
   return { go:set, next(){ if(i<3) set(i+1); }, back(){ if(i>0) set(i-1); } };
 })();
@@ -283,7 +313,23 @@ $("next1").onclick = ()=> { collectStep1(); wizard.next(); };
 $("next2").onclick = ()=> { collectStep2(); wizard.next(); };
 $("next3").onclick = ()=> { collectStep3(); buildAndType(); wizard.next(); };
 
-/* Step 1: Keywords (Middle Eastern list) */
+/* Progress slider animation (slow, dynamic) */
+let meterNow = 0; // %
+function animateMeterTo(target){
+  target = Math.max(0, Math.min(100, target));
+  const start = meterNow;
+  const dur = 1200; // ms slow
+  const t0 = performance.now();
+  (function tick(t){
+    const k = Math.min(1,(t - t0)/dur);
+    const cur = start + (target - start)*k;
+    $("meterFill").style.width = cur + "%";
+    $("meterKnob").style.left = cur + "%";
+    if(k < 1) requestAnimationFrame(tick); else meterNow = target;
+  })(performance.now());
+}
+
+/* Step 1: Keywords (unlimited selection) */
 const KEYWORDS = [
   "shawarma","hummus","grape leaves","kabob","baklava","tabouleh","falafel","pita","saj",
   "knafeh","chicken kebab","adana","lamb chops","couscous","shepherd’s salad","turkish coffee"
@@ -298,8 +344,7 @@ function makeChip(label,{single=false}={}){
       b.setAttribute("aria-pressed","true");
     }else{
       const on = b.getAttribute("aria-pressed")==="true";
-      if(!on && b.parentElement.querySelectorAll('.chip[aria-pressed="true"]').length>=3) return;
-      b.setAttribute("aria-pressed", on?"false":"true");
+      b.setAttribute("aria-pressed", on?"false":"true"); // no limit
     }
   };
   return b;
@@ -307,9 +352,8 @@ function makeChip(label,{single=false}={}){
 (function renderStep1(){
   const kw = $("kwList"); KEYWORDS.forEach(k=>kw.appendChild(makeChip(k)));
 })();
-
 function collectStep1(){
-  state.keywords = [...$("kwList").querySelectorAll('.chip[aria-pressed="true"]')].map(x=>x.textContent).slice(0,3);
+  state.keywords = [...$("kwList").querySelectorAll('.chip[aria-pressed="true"]')].map(x=>x.textContent);
 }
 
 /* Step 2: Visit / Parking */
@@ -330,7 +374,7 @@ function collectStep3(){ state.extra = $("extra").value.trim(); }
 
 /* Step 4: Review typing */
 function buildReview(){
-  const base = "An evening at Sahara was excellent. The kitchen’s care and flavors stood out. 🍽️ Highly recommended.";
+  const base = "An evening at Sahara was excellent. The kitchen’s care and flavors stood out. Highly recommended.";
   const kw = state.keywords.length ? ` Highlights: ${state.keywords.join(", ")}.` : "";
   const bits = [state.visitType && state.visitType.toLowerCase(), state.parking && (state.parking.toLowerCase()+" parking")].filter(Boolean).join(", ");
   const det = bits ? ` I went for ${bits}.` : "";
@@ -365,8 +409,7 @@ $("sendNeg").onclick=()=>{
 };
 
 /* Google links */
-if(GOOGLE_URL){ $("googleTop").href=GOOGLE_URL; $("googleBottom").href=GOOGLE_URL; }
-else { ["googleTop","googleBottom"].forEach(id=>$(id).addEventListener("click",e=>e.preventDefault())); }
+$("googleTop").href=GOOGLE_URL; $("googleBottom").href=GOOGLE_URL;
 </script>
 </body>
 </html>
